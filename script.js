@@ -20,6 +20,8 @@ const account1 = {
     '2020-07-11T23:36:17.929Z',
     '2020-07-12T10:51:36.790Z',
   ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
 };
 
 const account2 = {
@@ -37,6 +39,8 @@ const account2 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
 const account3 = {
@@ -54,6 +58,8 @@ const account3 = {
     '2020-07-11T23:36:17.929Z',
     '2020-07-12T10:51:36.790Z',
   ],
+  currency: 'EUR',
+  locale: 'de-DE',
 };
 
 const account4 = {
@@ -71,6 +77,8 @@ const account4 = {
     '2020-09-11T23:36:17.929Z',
     '2020-07-12T10:51:36.790Z',
   ],
+  currency: 'EUR',
+  locale: 'fr',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -166,6 +174,7 @@ let currentAccount;
 
 
 
+
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -177,14 +186,24 @@ btnLogin.addEventListener('click', function (e) {
 
     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
-    const now = new Date();
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hours = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
 
-    labelDate.textContent = `${day}/${month}/${year}, ${hours}:${min}`;
+
+    const now = new Date();
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'long', // numeric , 2-digit
+
+      year: 'numeric', //  2-digit
+      weekday: 'short'
+
+    }
+
+    const locale = currentAccount.locale;
+    console.log(locale);
+    // check  : http://www.lingoes.net/en/translator/langcode.htm 
+    labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
 
     //Clear the input fields
     inputLoginPin.value = '';
@@ -269,8 +288,8 @@ labelBalance.addEventListener('click', function () {
   });
 
 });
-// //Fake log in
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
+//Fake log in
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
 
