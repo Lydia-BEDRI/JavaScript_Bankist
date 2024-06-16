@@ -170,9 +170,32 @@ createUsernames(accounts);
 const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 // console.log(account);
 
-let currentAccount;
+let currentAccount, timer;
 
+const startLogoutTimer = function () {
+  const tick = function () {
+    const min = `${Math.trunc(time / 60)}`.padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    //in each call, print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
 
+    // when 0 sec, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = `Log in to get started`;
+
+      containerApp.style.opacity = 0;
+    }
+    // decrease 1 sec
+    time--;
+  }
+  //set time to 5 min
+  let time = 10;
+  //call timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+}
 
 
 btnLogin.addEventListener('click', function (e) {
@@ -209,7 +232,8 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginPin.value = '';
     inputLoginUsername.value = '';
     inputLoginPin.blur();
-
+    if (timer) clearInterval(timer);
+    timer = startLogoutTimer();
     updateUI(currentAccount);
   }
 });
@@ -240,7 +264,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     updateUI(currentAccount);
   }
+  // reset timer
 
+  clearInterval(timer);
+  timer = startLogoutTimer();
 });
 
 btnLoan.addEventListener('click', function (e) {
@@ -255,7 +282,10 @@ btnLoan.addEventListener('click', function (e) {
 
   }
   inputLoanAmount.value = '';
+  // reset timer
 
+  clearInterval(timer);
+  timer = startLogoutTimer();
 });
 
 
@@ -289,7 +319,7 @@ labelBalance.addEventListener('click', function () {
 
 });
 //Fake log in
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
